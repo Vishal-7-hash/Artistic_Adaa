@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artistic Adaa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a69bd; --secondary-color: #f6b93b; --accent-color: #e55039;
+            --background-color: #f7f1e3; --surface-color: #ffffff; --text-color: #3d3d3d;
+            --font-header: 'Merriweather', serif; --font-body: 'Montserrat', sans-serif;
+        }
+        body { font-family: var(--font-body); background-color: var(--background-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        .container { max-width: 1200px; margin: auto; background: var(--surface-color); padding: 2rem 3rem; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        h1, h2, h3, h4 { font-family: var(--font-header); color: var(--primary-color); text-align: center; margin-bottom: 1rem; }
+        h1 { font-size: 3rem; } h2 { font-size: 2.2rem; }
+        form { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; padding: 2rem; border: 1px solid #dfe4ea; border-radius: 8px; background-color: #f8f9fa; }
+        input, textarea { padding: 0.8rem; border: 1px solid #ced6e0; border-radius: 4px; font-family: var(--font-body); font-size: 1rem; }
+        .radio-group { border: none; padding: 0; display: flex; gap: 1rem;}
+        .btn { padding: 0.8rem 1.5rem; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-primary { background: linear-gradient(45deg, var(--primary-color), #6a89cc); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 7px 20px rgba(0,0,0,0.2); }
+        .btn-secondary { background: linear-gradient(45deg, var(--accent-color), #f19066); }
+        .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 7px 20px rgba(0,0,0,0.2); }
+        .main-nav { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #dfe4ea; }
+        .nav-btn { background: none; border: none; font-size: 1.1rem; color: var(--primary-color); cursor: pointer; padding: 0.5rem 1.5rem; font-weight: 500; transition: all 0.3s ease; }
+        .nav-btn:hover { color: var(--accent-color); }
+        .nav-btn.active { color: var(--accent-color); font-weight: bold; border-bottom: 3px solid var(--secondary-color); }
+        .profile-nav { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+        .profile-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color); }
+        .view { display: none; }
+        .active-view { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #portfolioItems { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .item { border-radius: 12px; background: var(--surface-color); text-align: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+        .item:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+        .item img { width: 100%; height: 250px; object-fit: cover; }
+        .item-content { padding: 1.5rem; }
+        .item-content h4 { font-family: var(--font-header); margin: 0 0 0.5rem 0; font-size: 1.3rem; }
+        .item-content .price { font-weight: bold; color: var(--accent-color); font-size: 1.25rem; margin: 0.5rem 0; }
+        .item-content .artisan-name { font-size: 0.9rem; color: #7f8c8d; margin-top: 0.5rem; }
+        .item-content .btn { margin-top: 1rem; padding: 0.6rem 1.2rem; }
+        .auth-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .message { text-align: center; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: 500; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .cart-item, .order-item-summary, .sales-item { display: flex; align-items: center; gap: 1.5rem; padding: 1rem; border-bottom: 1px solid #ecf0f1; text-align: left; }
+        .cart-item img, .order-item-summary img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; }
+        .order-history-item { border: 1px solid #dfe4ea; border-radius: 8px; margin-bottom: 1.5rem; padding: 1.5rem; background: #f8f9fa; }
+        .order-history-item h4 { text-align: left; margin-bottom: 1rem; }
+        #cartTotal, #checkoutBtn { margin-top: 2rem; text-align: right; }
+        #cartTotal { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; } th, td { padding: 12px; border-bottom: 1px solid #dfe4ea; text-align: left; } thead { background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Artistic Adaa</h1>
+            <nav id="mainNav" class="main-nav"></nav>
+        </header>
+        <div id="messageArea"></div>
+        <main id="mainContent">
+            </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const API_BASE_URL = 'api';
+        let state = { currentUser: null, currentView: 'authView' };
+
+        const mainNav = document.getElementById('mainNav');
+        const mainContent = document.getElementById('mainContent');
+        const messageArea = document.getElementById('messageArea');
+        
+        const templates = {
+            authView: () => `<section class="view"><div class="auth-forms"><form id="registerForm" enctype="multipart/form-data"><h2>Register</h2><input type="text" name="name" placeholder="Your Full Name" required><input type="email" name="email" placeholder="Your Email" required><input type="password" name="password" placeholder="Password" required><label for="profilePicture">Profile Picture (Optional):</label><input type="file" name="profilePicture" accept="image/*"><div class="radio-group"><label><input type="radio" name="userType" value="user" checked> I am a User</label><label><input type="radio" name="userType" value="artisan"> I am an Artisan</label></div><button type="submit" class="btn btn-primary">Register</button></form><form id="loginForm"><h2>Login</h2><input type="text" id="loginCredential" placeholder="Email or Username" required><input type="password" id="loginPassword" placeholder="Password" required><button type="submit" class="btn btn-primary">Login</button></form></div></section>`,
+            portfolioView: () => `<section class="view"><h2>Explore the Crafts</h2><div id="portfolioItems"></div></section>`,
+            artisanDashboardView: () => `<section class="view"><h2>My Creations Dashboard</h2><form id="createItemForm" enctype="multipart/form-data"><h3>Add a New Craft</h3><input type="text" name="itemName" placeholder="Item Name" required><textarea name="description" placeholder="Description" required></textarea><input type="number" name="price" placeholder="Price (INR)" step="0.01" required><label for="craftImage">Upload an image of your craft:</label><input type="file" name="craftImage" accept="image/*" required><button type="submit" class="btn btn-primary">Add Item</button></form></section>`,
+            cartView: () => `<section class="view"><h2>Your Shopping Cart</h2><div id="cartItems"></div><div id="cartTotal"></div><button id="checkoutBtn" class="btn btn-secondary">Place Order</button></section>`,
+            orderHistoryView: () => `<section class="view"><h2>Your Order History</h2><div id="orderHistory"></div></section>`,
+            artisanSalesView: () => `<section class="view"><h2>Your Sales History</h2><div id="salesHistory"></div></section>`,
+        };
+
+        const render = async () => {
+            updateNav();
+            mainContent.innerHTML = templates[state.currentView] ? templates[state.currentView]() : '<h2>Page Not Found</h2>';
+            mainContent.querySelector('.view')?.classList.add('active-view');
+            attachEventListeners();
+            
+            if (state.currentUser) {
+                if (state.currentView === 'portfolioView') await renderPortfolio();
+                if (state.currentView === 'cartView') await renderCart();
+                if (state.currentView === 'orderHistoryView') await renderUserOrderHistory();
+                if (state.currentView === 'artisanSalesView') await renderArtisanSales();
+            }
+        };
+
+        const updateNav = () => {
+            mainNav.innerHTML = ''; 
+            if (!state.currentUser) return;
+            
+            if (state.currentUser.userType === 'user') {
+                mainNav.appendChild(createNavBtn('Explore', 'portfolioView'));
+                mainNav.appendChild(createNavBtn('My Cart', 'cartView'));
+                mainNav.appendChild(createNavBtn('My Orders', 'orderHistoryView'));
+            }
+            if (state.currentUser.userType === 'artisan') {
+                mainNav.appendChild(createNavBtn('Creations', 'portfolioView'));
+                mainNav.appendChild(createNavBtn('My Dashboard', 'artisanDashboardView'));
+                mainNav.appendChild(createNavBtn('My Sales', 'artisanSalesView'));
+            }
+            
+            const profileNav = document.createElement('div');
+            profileNav.className = 'profile-nav';
+            let profileContent = `<span>${state.currentUser.name}</span>`;
+            if (state.currentUser.profilePictureUrl && state.currentUser.profilePictureUrl !== 'null') {
+                profileContent += `<img src="${state.currentUser.profilePictureUrl}" alt="Profile Picture" class="profile-pic">`;
+            }
+            const logoutBtn = createNavBtn('Logout', 'logout');
+            profileNav.innerHTML = profileContent;
+            profileNav.appendChild(logoutBtn);
+            mainNav.appendChild(profileNav);
+            
+            mainNav.querySelector('[data-view="logout"]').onclick = handleLogout;
+
+            const activeBtn = Array.from(mainNav.querySelectorAll('.nav-btn')).find(btn => btn.dataset.view === state.currentView);
+            if (activeBtn) activeBtn.classList.add('active');
+        };
+
+        const createNavBtn = (text, viewName) => {
+            const btn = document.createElement('button');
+            btn.textContent = text; btn.className = 'nav-btn'; btn.dataset.view = viewName;
+            if (viewName !== 'logout') {
+                btn.onclick = () => { state.currentView = viewName; render(); };
+            }
+            return btn;
+        };
+        
+        const renderPortfolio = async () => {
+            const response = await fetch(`${API_BASE_URL}/portfolio/read_all.php`);
+            const items = await response.json();
+            const div = document.getElementById('portfolioItems');
+            if (!div) return;
+            if(items.length === 0) { div.innerHTML = '<h4>No crafts have been added yet.</h4>'; return; }
+            div.innerHTML = items.map(item => `
+                <div class="item">
+                    <img src="${item.image_url}" alt="${item.itemName}">
+                    <div class="item-content">
+                        <h4>${item.itemName}</h4>
+                        <p>${item.description}</p>
+                        <div class="price">₹${parseFloat(item.price).toFixed(2)}</div>
+                        <div class="artisan-name">By: ${item.artisanName}</div>
+                        ${state.currentUser.userType === 'user' ? `<button class="btn btn-secondary add-to-cart-btn" data-item-id="${item.id}">Add to Cart</button>` : ''}
+                    </div>
+                </div>`).join('');
+        };
+
+        const renderCart = async () => {
+            const response = await fetch(`${API_BASE_URL}/cart/get.php?userId=${state.currentUser.id}`);
+            const items = await response.json();
+            const cartItemsDiv = document.getElementById('cartItems');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const cartTotalDiv = document.getElementById('cartTotal');
+
+            if (!cartItemsDiv) return;
+            if (items.length === 0) { 
+                cartItemsDiv.innerHTML = '<h4>Your cart is empty.</h4>'; 
+                if (checkoutBtn) checkoutBtn.style.display = 'none';
+                if (cartTotalDiv) cartTotalDiv.style.display = 'none';
+                return; 
+            }
+            
+            let total = 0;
+            cartItemsDiv.innerHTML = items.map(item => {
+                total += item.price * item.quantity;
+                return `<div class="cart-item"><img src="${item.image_url}" alt="${item.itemName}"><div><h4>${item.itemName}</h4><div>Price: ₹${item.price} x ${item.quantity} = ₹${(item.price * item.quantity).toFixed(2)}</div></div></div>`;
+            }).join('');
+            if (cartTotalDiv) cartTotalDiv.innerHTML = `<strong>Total: ₹${total.toFixed(2)}</strong>`;
+            if (checkoutBtn) checkoutBtn.style.display = 'block';
+            if (cartTotalDiv) cartTotalDiv.style.display = 'block';
+        };
+
+        const renderUserOrderHistory = async () => {
+            const response = await fetch(`${API_BASE_URL}/orders/get_user_history.php?userId=${state.currentUser.id}`);
+            const orders = await response.json();
+            const div = document.getElementById('orderHistory');
+            if (!div) return;
+            if (orders.length === 0) { div.innerHTML = '<h4>You have no past orders.</h4>'; return; }
+            div.innerHTML = orders.map(order => `
+                <div class="order-history-item">
+                    <h4>Order on ${new Date(order.order_date).toLocaleDateString()} - Total: ₹${parseFloat(order.total_amount).toFixed(2)}</h4>
+                    ${order.items.map(item => `
+                        <div class="order-item-summary">
+                            <img src="${item.image_url}" alt="${item.itemName}">
+                            <div>
+                                <strong>${item.itemName}</strong><br>
+                                Qty: ${item.quantity} @ ₹${parseFloat(item.price).toFixed(2)}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        };
+
+        const renderArtisanSales = async () => {
+            const response = await fetch(`${API_BASE_URL}/orders/get_artisan_sales.php?artisanId=${state.currentUser.id}`);
+            const sales = await response.json();
+            const div = document.getElementById('salesHistory');
+            if (!div) return;
+            if (sales.length === 0) { div.innerHTML = '<h4>You have no sales yet.</h4>'; return; }
+            div.innerHTML = `
+                <table>
+                    <thead><tr><th>Item</th><th>Date</th><th>Customer</th><th>Quantity</th><th>Price</th><th>Total</th></tr></thead>
+                    <tbody>
+                        ${sales.map(sale => `
+                            <tr>
+                                <td>${sale.itemName}</td>
+                                <td>${new Date(sale.order_date).toLocaleDateString()}</td>
+                                <td>${sale.customerName}</td>
+                                <td>${sale.quantity}</td>
+                                <td>₹${parseFloat(sale.price).toFixed(2)}</td>
+                                <td>₹${(sale.quantity * sale.price).toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+        };
+        
+        const showMessage = (message, type) => { messageArea.innerHTML = `<div class="message ${type}">${message}</div>`; setTimeout(() => messageArea.innerHTML = '', 4000); };
+        
+        const handleRegister = async (e) => { e.preventDefault(); const formData = new FormData(e.target); const response = await fetch(`${API_BASE_URL}/users/register.php`, { method: 'POST', body: formData }); const result = await response.json(); if (response.ok) { showMessage(result.message, 'success'); e.target.reset(); } else { showMessage(result.error, 'error'); } };
+        const handleLogin = async (e) => { e.preventDefault(); const form = e.target; const response = await fetch(`${API_BASE_URL}/users/login.php`, { method: 'POST', body: JSON.stringify({ login: form.loginCredential.value, password: form.loginPassword.value }) }); const result = await response.json(); if (response.ok) { state.currentUser = { id: result.userId, name: result.name, userType: result.userType, profilePictureUrl: result.profilePictureUrl }; Object.keys(state.currentUser).forEach(key => localStorage.setItem(key, state.currentUser[key])); state.currentView = 'portfolioView'; render(); } else { showMessage(result.error, 'error'); } };
+        const handleLogout = () => { state.currentUser = null; state.currentView = 'authView'; localStorage.clear(); render(); };
+        const handleCreateItem = async (e) => { e.preventDefault(); const form = e.target; const formData = new FormData(form); formData.append('artisanId', state.currentUser.id); const response = await fetch(`${API_BASE_URL}/portfolio/create.php`, { method: 'POST', body: formData }); const result = await response.json(); if (response.ok) { showMessage(result.message, 'success'); state.currentView = 'portfolioView'; render(); } else { showMessage(result.error, 'error'); } };
+        const handleAddToCart = async (itemId) => { await fetch(`${API_BASE_URL}/cart/add.php`, { method: 'POST', body: JSON.stringify({ userId: state.currentUser.id, itemId: itemId }) }); showMessage('Item added to cart!', 'success'); };
+        const handleCheckout = async () => { const response = await fetch(`${API_BASE_URL}/orders/create.php`, { method: 'POST', body: JSON.stringify({ userId: state.currentUser.id }) }); const result = await response.json(); if(response.ok) { showMessage(result.message, 'success'); state.currentView = 'orderHistoryView'; render(); } else { showMessage(result.error, 'error'); } };
+        
+        const attachEventListeners = () => {
+            document.getElementById('registerForm')?.addEventListener('submit', handleRegister);
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            document.getElementById('createItemForm')?.addEventListener('submit', handleCreateItem);
+            document.getElementById('portfolioItems')?.addEventListener('click', (e) => { if(e.target.classList.contains('add-to-cart-btn')) handleAddToCart(e.target.dataset.itemId); });
+            document.getElementById('checkoutBtn')?.addEventListener('click', handleCheckout);
+        };
+        
+        const init = () => {
+            const storedUser = { id: localStorage.getItem('userId'), name: localStorage.getItem('userName'), userType: localStorage.getItem('userType'), profilePictureUrl: localStorage.getItem('profilePictureUrl') };
+            if (storedUser.id && storedUser.name && storedUser.userType) {
+                if (storedUser.profilePictureUrl === 'null') storedUser.profilePictureUrl = null;
+                state.currentUser = storedUser;
+                state.currentView = 'portfolioView';
+            } else {
+                state.currentView = 'authView';
+            }
+            render();
+        };
+        init();
+    });
+    </script>
+</body>
+</html>
